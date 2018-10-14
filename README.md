@@ -2,17 +2,19 @@
 
 Here are some runnable file.
 
-You can use this command to add these in your system:
+You can use this file by run these command:
 
 ```bash
-sudo export PATH=$PATH:{The path that you put the bin floder}
+export PATH=$PATH:{The path that you put the bin floder}
 ```
 
 For example, if the path of this floder is `/home/xxxx/ToolBox/bin`. You need to run this command:
 
 ```bash
-sudo export PATH=$PATH:/home/xxxx/ToolBox/bin
+export PATH=$PATH:/home/xxxx/ToolBox/bin
 ```
+
+After run these, you can type the name of the file to run it for temporary(I will list what you can use under this). If you want to use it for a while, you might add this command to the `~/.profile`.
 
 > Sorry about the friends who use Windows. 
 > I haven't compile the source in Windows. 
