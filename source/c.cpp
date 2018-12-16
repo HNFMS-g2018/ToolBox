@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
       FOR(i, 0, need.size() - 1) Compile(need.at(i));
     }
   } else {
-    if (argv[1][0] == '-' || argv[1][1] == 'h') {
+    if (argv[1][0] == '-' && argv[1][1] == 'h') {
       ShowHelp();
       return 0;
     }
