@@ -16,6 +16,8 @@ namespace SURVICE {
 	void init(void); // Get the HOME path.
 	void bash_run(string); // Give a command and run in bash.
 	void show_wrong(string); // Show 'Error', give the error code and quit.
+	void install(); // Install the application into the computer
+	void uninstall(); // Uninstall the application from the computer
 	bool check_path(string); // Check if there is the designated path.
 	bool check_address(string); // Check if it is a legal website address.
 	string to_string(char *); // Trun char array to string
@@ -56,23 +58,29 @@ int main(int argc, char* argv[]) {
 		quit();
 	}
 	string parameter = SURVICE::to_string(argv[1]);
-	if (parameter == "-a") {
+	if (parameter == "-a" || parameter == "--add") {
 		if (argc == 2) PROGRAM::add_link((Link) {false, "", ""});
 		else if (argc == 4) PROGRAM::add_link((Link) {false, SURVICE::to_string(argv[2]), SURVICE::to_string(argv[3])});
 		else SURVICE::show_wrong("0001");
-	} else if (parameter == "-c") {
+	} else if (parameter == "-c" || parameter == "--change") {
 		if (argc == 2) PROGRAM::change_browser("");
 		else if (argc == 3) PROGRAM::change_browser(SURVICE::to_string(argv[2]));
 		else SURVICE::show_wrong("0001");
-	} else if (parameter == "-d") {
+	} else if (parameter == "-d" || parameter == "--delete") {
 		if (argc == 2) PROGRAM::del_link("");
 		else if (argc == 3) PROGRAM::del_link(SURVICE::to_string(argv[2]));
 		else SURVICE::show_wrong("0001");
-	} else if (parameter == "-h") {
+	} else if (parameter == "-h" || parameter == "--help") {
 		if (argc == 2) PROGRAM::show_help();
 		else SURVICE::show_wrong("0001");
-	} else if (parameter == "-l") {
+	} else if (parameter == "-i" || parameter == "--install") {
+		if (argc == 2) SURVICE::install();
+		else SURVICE::show_wrong("0001");
+	} else if (parameter == "-l" || parameter == "--list") {
 		if (argc == 2) PROGRAM::list_link();
+		else SURVICE::show_wrong("0001");
+	} else if (parameter == "-u" || parameter == "--uninstall") {
+		if (argc == 2) SURVICE::uninstall();
 		else SURVICE::show_wrong("0001");
 	} else {
 		if (argv[1][0] == '-') SURVICE::show_wrong("0003");
@@ -123,6 +131,14 @@ string SURVICE::to_string(char *c) {
 	string s = c;
 	return s;
 }
+
+void SURVICE::install() {
+	SURVICE::bash_run("sudo cp tolink /usr/bin");
+}
+
+void SURVICE::uninstall() {
+	SURVICE::bash_run("sudo rm /usr/bin/tolink");
+}
 /* }}} */
 
 /* PROGRAM {{{ */
@@ -132,24 +148,33 @@ void PROGRAM::init(void) {
 		SURVICE::bash_run("mkdir " + configPath);
 		if (!SURVICE::check_path(configPath)) SURVICE::show_wrong("0002");
 	}
-	PROGRAM::configFile = SURVICE::HOME + "/.config/tolink/init.conf";
+	PROGRAM::configFile = SURVICE::HOME + "/.config/tolink/init.cfg";
 	if (!SURVICE::check_path(PROGRAM::configFile)) PROGRAM::welcome();
 	else PROGRAM::read_config();
 }
 
 void PROGRAM::show_help(void) {
 	cout << 
-"'tolink' can open the designated or saved link in the browser." << endl <<
+"'tolink' can open the designated or saved link in the browser." << endl << endl <<
 "Usage: " << endl << 
 "  tolink <ID>/<name>      Open the saved link by its ID or name" << endl <<
 "  tolink [options]        Change or show the saved information" << endl << 
 "  tolink <path>           Open the designated link" << endl << endl <<
 "Options: " << endl << 
 "  -a, -a <name> <path>    Add new address with the unique name" << endl <<
+"      --add" << endl <<
 "  -c, -c <browser>        Change the defalt browser" << endl << 
+"      --change" << endl << 
 "  -d, -d <ID>/<name>      Delete the address by its ID and name" << endl << 
+"      --delete" << endl <<
 "  -h                      Show help" << endl <<
-"  -l                      List the all the address with its ID and name" << endl << endl <<
+"      --help" << endl << 
+"  -i                      Install 'tolink' into the computer" << endl <<
+"      --install" << endl <<
+"  -l                      List the all the address with its ID and name" << endl <<
+"      --list" << endl << 
+"  -u                      Uninstall 'tolink' from the computer" << endl <<
+"      --uninstall" << endl << endl <<
 "Error code: " << endl <<
 "  0001      Too much or too less parameter" << endl << 
 "  0002      Can't create or write the config file" << endl <<
