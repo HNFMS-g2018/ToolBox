@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 	SURVICE::init();
 	PROGRAM::init();
 	if (argc == 1) {
-		PROGRAM::show_help();
+		PROGRAM::list_link();
 		quit();
 	}
 	string parameter = SURVICE::to_string(argv[1]);
